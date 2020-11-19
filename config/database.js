@@ -1,3 +1,8 @@
+const parse = require("pg-connection-string").parse;
+const config = parse(process.env.DATABASE_URL);
+
+// Issues:
+// https://github.com/strapi/strapi/issues/5696
 module.exports = ({ env }) => ({
   defaultConnection: "default",
   connections: {
@@ -5,11 +10,12 @@ module.exports = ({ env }) => ({
       connector: "bookshelf",
       settings: {
         client: "postgres",
-        host: "${process.env.DATABASE_HOST}",
-        port: "${process.env.DATABASE_PORT}",
-        database: "${process.env.DATABASE_NAME}",
-        username: "${process.env.DATABASE_USERNAME}",
-        password: "${process.env.DATABASE_PASSWORD}",
+        host: config.host,
+        port: config.port,
+        database: config.database,
+        username: config.user,
+        password: config.password,
+        charset: "utf8",
         ssl: { rejectUnauthorized: false },
       },
       options: {},
